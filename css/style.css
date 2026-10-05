@@ -170,3 +170,14 @@ body.dark .exp-card { background: #1c2635; border-color: #2c3a4e; }
 body.dark .lib-table tbody tr:hover { background: #243447; }
 body.dark .id-card { background: linear-gradient(160deg, #1c2635, #243447); border-color: #2c3a4e; }
 body.dark .exp-card p, body.dark p { color: #9fb0c3; }
+
+/* ---------- a11y & polish (web-design-guidelines) ---------- */
+.exp-card { display: block; text-align: left; font: inherit; color: inherit; }
+.linklike { background: none; border: none; padding: 0; font: inherit; cursor: pointer; }
+.suggestions li button { background: none; border: none; width: 100%; text-align: left; font: inherit; padding: 0; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+h1,h2,h3 { text-wrap: balance; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+body { -webkit-tap-highlight-color: rgba(0,0,0,.08); touch-action: manipulation; }
+body.dark { color-scheme: dark; }

@@ -79,11 +79,11 @@ function renderHome() {
 }
 function renderHomeResults(list) {
   $('expList').innerHTML = list.map(e =>
-    `<div class="exp-card" onclick="openPreview(${e.id})">
+    `<button class="exp-card" onclick="openPreview(${e.id})">
        <div class="exp-module">${e.module || 'Uncategorized'}</div>
        <h4>${e.name}</h4>
        <p>${e.sections.length} section(s)</p>
-     </div>`).join('') || '<p style="color:var(--muted)">No matching experiments found.</p>';
+     </button>`).join('') || '<p style="color:var(--muted)">No matching experiments found.</p>';
 }
 function setupSearch() {
   const input = $('searchInput'), box = $('suggestions');
@@ -91,7 +91,7 @@ function setupSearch() {
     const q = input.value.trim().toLowerCase();
     const matches = getAllExperiments().filter(e => e.name.toLowerCase().includes(q));
     renderHomeResults(matches);
-    box.innerHTML = matches.map(e => `<li onclick="pickSuggestion(${e.id})">${e.name}</li>`).join('');
+    box.innerHTML = matches.map(e => `<li><button type="button" onclick="pickSuggestion(${e.id})">${e.name}</button></li>`).join('');
     box.style.display = matches.length && input.value ? 'block' : 'none';
   });
   input.addEventListener('blur', () => setTimeout(() => box.style.display = 'none', 200));
@@ -112,7 +112,7 @@ function renderModules() {
     return `<div class="module-block">
       <h3>${m}</h3>
       <div class="exp-grid">
-        ${exps.length ? exps.map(e => `<div class="exp-card" onclick="openPreview(${e.id})"><h4>${e.name}</h4><p>${e.summary ? e.summary.slice(0,80)+'…' : ''}</p></div>`).join('') : '<p class="muted">No experiments yet.</p>'}
+        ${exps.length ? exps.map(e => `<button class="exp-card" onclick="openPreview(${e.id})"><h4>${e.name}</h4><p>${e.summary ? e.summary.slice(0,80)+'…' : ''}</p></button>`).join('') : '<p class="muted">No experiments yet.</p>'}
       </div>
     </div>`;
   }).join('');
@@ -223,3 +223,4 @@ sys.stderr = io.StringIO()
 
 renderHome();
 setupSearch();
+
