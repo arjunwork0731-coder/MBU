@@ -12,6 +12,22 @@ function showView(id) {
 function navTo(id) {
   showView(id);
   if (id === 'view-modules') renderModules();
+  if (id === 'view-library') renderLibrary();
+}
+
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  const on = document.body.classList.contains('dark');
+  localStorage.setItem('mbu_dark', on ? '1' : '0');
+  $('darkToggle').textContent = on ? '☀️' : '🌙';
+}
+if (localStorage.getItem('mbu_dark') === '1') { document.body.classList.add('dark'); $('darkToggle').textContent = '☀️'; }
+
+function renderLibrary() {
+  const rows = getAllExperiments().map(e =>
+    `<tr onclick="openPreview(${e.id})"><td>${e.id}</td><td><strong>${e.name}</strong></td><td>${e.module || ''}</td><td>${e.sections.length}</td><td><a href="${e.youtubeLink || '#'}" target="_blank" onclick="event.stopPropagation()">Video</a> · <a href="${e.githubLink || '#'}" target="_blank" onclick="event.stopPropagation()">GitHub</a></td></tr>`
+  ).join('');
+  $('libTable').innerHTML = `<thead><tr><th>#</th><th>Experiment</th><th>Module</th><th>Sections</th><th>Links</th></tr></thead><tbody>${rows}</tbody>`;
 }
 
 /* ---------- merge saved experiments ---------- */

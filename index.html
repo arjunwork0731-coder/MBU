@@ -14,7 +14,9 @@
   <nav class="topnav">
     <a onclick="navTo('view-home')">Home</a>
     <a onclick="navTo('view-modules')">Modules</a>
+    <a onclick="navTo('view-library')">Library</a>
     <a onclick="navTo('view-about')">About</a>
+    <a id="darkToggle" onclick="toggleDark()" title="Toggle dark mode">🌙</a>
   </nav>
 </header>
 
@@ -82,6 +84,14 @@
           https://github.com/arjunwork0731-coder
         </a>
       </p>
+    </div>
+  </section>
+
+  <!-- ================= LIBRARY ================= -->
+  <section id="view-library" class="view">
+    <h2 style="color:var(--primary);margin-bottom:14px;">Experiment Library</h2>
+    <div class="card">
+      <table id="libTable" class="lib-table"></table>
     </div>
   </section>
 

@@ -154,3 +154,17 @@ header.topbar { flex-wrap: wrap; }
 .add-form { display: flex; flex-direction: column; gap: 8px; max-width: 640px; }
 .add-form input, .add-form select, .add-form textarea { padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: .95rem; font-family: inherit; }
 .add-form label { font-weight: 600; margin-top: 6px; }
+
+/* ---------- library table + dark mode ---------- */
+.lib-table { width: 100%; border-collapse: collapse; }
+.lib-table th, .lib-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: .95rem; }
+.lib-table tbody tr { cursor: pointer; transition: background .2s; }
+.lib-table tbody tr:hover { background: #eef4f2; }
+.lib-table a { color: var(--accent); }
+body.dark { background: #121a26; color: #dbe4ee; }
+body.dark .card { background: #1c2635; border-color: #2c3a4e; }
+body.dark input, body.dark select, body.dark textarea { background: #121a26; color: #dbe4ee; border-color: #2c3a4e; }
+body.dark .exp-card { background: #1c2635; border-color: #2c3a4e; }
+body.dark .lib-table tbody tr:hover { background: #243447; }
+body.dark .id-card { background: linear-gradient(160deg, #1c2635, #243447); border-color: #2c3a4e; }
+body.dark .exp-card p, body.dark p { color: #9fb0c3; }
