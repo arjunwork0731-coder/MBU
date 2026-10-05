@@ -1,18 +1,16 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --primary: #b76e79;        /* pastel rose */
-  --primary-dark: #9a5a64;
-  --accent: #f4c7ab;         /* pastel peach */
-  --accent2: #a8d5ba;        /* pastel mint */
-  --accent3: #b8c5e3;        /* pastel blue */
-  --accent4: #d8bfd8;        /* pastel lavender */
-  --bg: #fdf6f0;             /* soft cream */
+  --primary: #1e3a5f;        /* professional navy */
+  --primary-dark: #152c49;
+  --accent: #2a9d8f;         /* teal accent */
+  --accent2: #e9c46a;
+  --bg: #f4f6f9;
   --card: #ffffff;
-  --text: #4a4a55;
-  --muted: #8a8a95;
-  --border: #f0e4dc;
-  --code-bg: #3b3a4e;
+  --text: #253041;
+  --muted: #6b7686;
+  --border: #dde3ec;
+  --code-bg: #1b2735;
 }
 
 body {
@@ -156,19 +154,3 @@ header.topbar { flex-wrap: wrap; }
 .add-form { display: flex; flex-direction: column; gap: 8px; max-width: 640px; }
 .add-form input, .add-form select, .add-form textarea { padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: .95rem; font-family: inherit; }
 .add-form label { font-weight: 600; margin-top: 6px; }
-
-/* ---------- pastel refresh ---------- */
-body { background: linear-gradient(135deg, #fdf6f0 0%, #f3e8f5 50%, #e8f2fb 100%); }
-header.topbar { background: linear-gradient(90deg, #b76e79, #c9a0dc); }
-.hero { background: linear-gradient(120deg, #b76e79, #c9a0dc 55%, #a8d5ba); }
-.exp-card { border-radius: 16px; position: relative; overflow: hidden; }
-.exp-card::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:4px; background: linear-gradient(90deg,#f4c7ab,#a8d5ba,#b8c5e3); transition: left .35s ease; }
-.exp-card:hover::before { left: 0; }
-.add-btn { background: linear-gradient(90deg, #b76e79, #c9a0dc); transition: .3s ease transform, box-shadow; }
-.add-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 18px rgba(183,110,121,.35); }
-.section-chip { background: linear-gradient(135deg,#b76e79,#c9a0dc); }
-.topnav a { position: relative; }
-.topnav a::after { content:''; position:absolute; left:10px; right:10px; bottom:2px; height:2px; background:#fff; transform: scaleX(0); transition: transform .3s ease; transform-origin: left; }
-.topnav a:hover::after { transform: scaleX(1); }
-.module-block h3 { color: #9a5a64; border-bottom: 2px solid #f4c7ab; }
-footer { color: #9a8a92; }

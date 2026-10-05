@@ -172,5 +172,38 @@ function copyCode() {
   });
 }
 
+function downloadCode() {
+  const s = currentExp.sections[currentSectionIdx];
+  const blob = new Blob([s.code], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `experiment${currentExp.id}_section${s.letter}.py`;
+  a.click();
+}
+
+let pyodideReady = null;
+async function runCode() {
+  const out = $('codeOutput');
+  out.textContent = 'Running...';
+  try {
+    if (!pyodideReady) {
+      out.textContent = 'Loading Python runtime (first run may take a few seconds)...';
+      pyodideReady = loadPyodide();
+    }
+    const py = await pyodideReady;
+    py.runPython(`
+import sys, io
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+`);
+    py.runPython(currentExp.sections[currentSectionIdx].code);
+    const stdout = py.runPython("sys.stdout.getvalue()");
+    const stderr = py.runPython("sys.stderr.getvalue()");
+    out.textContent = stdout + (stderr ? '\n[stderr]\n' + stderr : '') || '(no output)';
+  } catch (err) {
+    out.textContent = 'Error: ' + err.message;
+  }
+}
+
 renderHome();
 setupSearch();
