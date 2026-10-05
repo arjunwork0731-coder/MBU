@@ -11,30 +11,37 @@
 <header class="topbar">
   <img src="assets/mbu-logo.png" alt="MBU Logo">
   <h1>Mohan Babu University <span>| Data Science Laboratory</span></h1>
+  <nav class="topnav">
+    <a onclick="navTo('view-home')">Home</a>
+    <a onclick="navTo('view-modules')">Modules</a>
+    <a onclick="navTo('view-about')">About</a>
+  </nav>
 </header>
 
 <main>
 
-  <!-- ================= PAGE 1 ================= -->
+  <!-- ================= HOME ================= -->
   <section id="view-home" class="view active">
+    <div class="hero">
+      <div>
+        <h2>Mohan Babu University</h2>
+        <h3>Data Science Laboratory</h3>
+        <p>Subject Code: <strong id="subjectCode"></strong></p>
+      </div>
+    </div>
+
     <div class="home-grid">
-      <div class="card main-box">
-        <div class="brand-row">
-          <img src="assets/mbu-logo.png" alt="MBU Logo">
-          <h2>Mohan Babu University</h2>
-        </div>
-        <div class="lab-name">Data Science Laboratory</div>
-        <div class="subject">Subject Code: <strong id="subjectCode"></strong></div>
-        <div class="search-wrap">
+      <div class="card">
+        <h3>Search Experiments</h3>
+        <div class="search-wrap" style="margin-top:12px;">
           <input id="searchInput" type="text" placeholder="Search Experiments..." autocomplete="off">
           <ul id="suggestions" class="suggestions"></ul>
         </div>
-
-        <div class="exp-head" style="margin-top:24px;">
+        <div class="exp-head" style="margin-top:20px;">
           <h3>Experiments:</h3>
-          <button class="add-btn" onclick="addExperiment()">+ ADD</button>
+          <button class="add-btn" onclick="navTo('view-modules')">+ ADD</button>
         </div>
-        <div id="expList" class="exp-list"></div>
+        <div id="expList" class="exp-grid"></div>
       </div>
 
       <div class="card id-card">
@@ -51,9 +58,61 @@
     </div>
   </section>
 
-  <!-- ================= PAGE 2 ================= -->
+  <!-- ================= MODULES ================= -->
+  <section id="view-modules" class="view">
+    <div class="exp-head">
+      <h2>Modules &amp; Experiments</h2>
+      <button class="add-btn" onclick="openAdd()">+ ADD Experiment</button>
+    </div>
+    <div id="modulesWrap"></div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section id="view-about" class="view">
+    <div class="card">
+      <h2 style="color:var(--primary);margin-bottom:12px;">About</h2>
+      <p style="line-height:1.7;">
+        Arjun Reddy is a B.Tech Data Science student at <strong>Mohan Babu University</strong>,
+        pursuing an interest in data analysis, machine learning, and building practical
+        data-driven applications. This laboratory website documents his Data Science
+        lab experiments — code, videos, and summaries for each module.
+      </p>
+      <p style="margin-top:14px;"><strong>GitHub:</strong>
+        <a href="https://github.com/arjunwork0731-coder" target="_blank" style="color:var(--primary);">
+          https://github.com/arjunwork0731-coder
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= ADD EXPERIMENT FORM ================= -->
+  <section id="view-add" class="view">
+    <button class="back-btn" onclick="navTo('view-modules')">← Back</button>
+    <div class="card">
+      <h2 style="color:var(--primary);margin-bottom:14px;">Add New Experiment</h2>
+      <form onsubmit="event.preventDefault(); saveNewExperiment();" class="add-form">
+        <label>Experiment Name</label>
+        <input id="fName" type="text" placeholder="Experiment 5 — ...">
+        <label>Module</label>
+        <select id="modSelect"></select>
+        <label>Preview Video Path (assets/videos/...)</label>
+        <input id="fPreview" type="text">
+        <label>YouTube Embed URL</label>
+        <input id="fYoutubeEmbed" type="text">
+        <label>YouTube Link</label>
+        <input id="fYoutube" type="text">
+        <label>GitHub Link</label>
+        <input id="fGithub" type="text">
+        <label>Summary</label>
+        <textarea id="fSummary" rows="4"></textarea>
+        <button class="add-btn" type="submit" style="margin-top:14px;">Save Experiment</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= PAGE 2 PREVIEW ================= -->
   <section id="view-preview" class="view">
-    <button class="back-btn" onclick="showView('view-home')">← Back</button>
+    <button class="back-btn" onclick="navTo('view-modules')">← Back</button>
     <div class="card">
       <div class="two-col">
         <div>
@@ -68,7 +127,7 @@
     </div>
   </section>
 
-  <!-- ================= PAGE 3 ================= -->
+  <!-- ================= PAGE 3 DETAILS ================= -->
   <section id="view-details" class="view">
     <button class="back-btn" onclick="showView('view-preview')">← Back</button>
     <div class="card">
@@ -82,7 +141,6 @@
           <div id="sectionsList" class="sections-list"></div>
         </div>
       </div>
-
       <div style="margin-top:26px;">
         <h4>YouTube Video:</h4>
         <iframe id="youtubeFrame" class="youtube-frame" allowfullscreen></iframe>
@@ -98,14 +156,13 @@
     </div>
   </section>
 
-  <!-- ================= PAGE 4 ================= -->
+  <!-- ================= PAGE 4 SECTION ================= -->
   <section id="view-section" class="view">
     <button class="back-btn" onclick="showView('view-details')">← Back</button>
     <div class="card">
       <h2 id="secExpTitle" class="exp-name"></h2>
       <h3 id="secLetter" style="color:var(--primary-dark);margin-bottom:14px;"></h3>
       <video id="sectionVideo" class="preview-video" controls preload="metadata"></video>
-
       <h3 style="margin-top:22px;">Code</h3>
       <div class="code-box">
         <div class="code-toolbar">
@@ -119,7 +176,7 @@
 
 </main>
 
-<footer>Mohan Babu University — Data Science Laboratory</footer>
+<footer>Mohan Babu University — Data Science Laboratory | Arjun Reddy</footer>
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>

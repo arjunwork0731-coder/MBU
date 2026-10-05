@@ -133,3 +133,23 @@ pre.code-scroll .ln { color: #64748b; user-select: none; padding-right: 14px; di
 .back-btn:hover { background: #eef0f4; }
 
 footer { text-align: center; color: var(--muted); padding: 24px; font-size: .85rem; }
+
+/* ---------- nav / hero / modules ---------- */
+.topnav { margin-left: auto; display: flex; gap: 18px; }
+.topnav a { color: #fff; text-decoration: none; cursor: pointer; font-weight: 600; padding: 6px 10px; border-radius: 8px; transition: .2s; }
+.topnav a:hover { background: rgba(255,255,255,.15); }
+header.topbar { flex-wrap: wrap; }
+.hero { background: linear-gradient(120deg, var(--primary), var(--primary-dark)); color: #fff; border-radius: 16px; padding: 34px; margin-bottom: 24px; box-shadow: 0 6px 20px rgba(109,23,36,.25); }
+.hero h2 { font-size: 2rem; } .hero h3 { color: var(--accent); margin: 6px 0; }
+.exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; margin-top: 12px; }
+.exp-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px; cursor: pointer; transition: .2s; }
+.exp-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+.exp-card h4 { color: var(--primary-dark); margin-bottom: 6px; }
+.exp-card p { color: var(--muted); font-size: .88rem; }
+.exp-module { font-size: .75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 700; margin-bottom: 6px; }
+.module-block { margin-bottom: 26px; }
+.module-block h3 { color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 6px; }
+.muted { color: var(--muted); }
+.add-form { display: flex; flex-direction: column; gap: 8px; max-width: 640px; }
+.add-form input, .add-form select, .add-form textarea { padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: .95rem; font-family: inherit; }
+.add-form label { font-weight: 600; margin-top: 6px; }

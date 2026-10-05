@@ -3,13 +3,29 @@ let currentSectionIdx = 0;
 
 const $ = (id) => document.getElementById(id);
 
+/* ---------- view switching ---------- */
 function showView(id) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   $(id).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+function navTo(id) {
+  showView(id);
+  if (id === 'view-modules') renderModules();
+}
 
-/* ---------- syntax highlighting (simple, Python-focused) ---------- */
+/* ---------- merge saved experiments ---------- */
+function getAllExperiments() {
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem('mbu_experiments') || '[]'); } catch (e) {}
+  return experiments.concat(saved);
+}
+function nextId() {
+  const all = getAllExperiments();
+  return all.length ? Math.max(...all.map(e => e.id)) + 1 : 1;
+}
+
+/* ---------- syntax highlighting ---------- */
 function highlight(code) {
   let esc = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   esc = esc.replace(/(#.*$)/gm, '<span class="cm">$1</span>');
@@ -19,12 +35,9 @@ function highlight(code) {
   esc = esc.replace(/\b([a-zA-Z_]\w*)(?=\()/g, '<span class="fn">$1</span>');
   return esc;
 }
-
 function renderCode(code) {
-  const lines = code.split('\n');
-  $('codeArea').innerHTML = lines.map((l, i) =>
-    `<span class="ln">${i + 1}</span>${highlight(l) || ' '}`
-  ).join('\n');
+  $('codeArea').innerHTML = code.split('\n').map((l, i) =>
+    `<span class="ln">${i + 1}</span>${highlight(l) || ' '}`).join('\n');
 }
 
 /* ---------- hover preview behavior ---------- */
@@ -36,7 +49,7 @@ function attachHoverPlay(video) {
   video.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
 }
 
-/* ---------- PAGE 1 ---------- */
+/* ---------- HOME ---------- */
 function renderHome() {
   $('studentPhoto').src = STUDENT.photo;
   $('studentPhoto').onerror = () => { $('studentPhoto').src = 'assets/images/student-placeholder.svg'; };
@@ -46,68 +59,102 @@ function renderHome() {
   $('sFaculty').textContent = STUDENT.faculty;
   $('sProfession').textContent = STUDENT.profession;
   $('subjectCode').textContent = SUBJECT_CODE;
-  renderExpList(experiments);
+  renderHomeResults(getAllExperiments());
 }
-
-function renderExpList(list) {
-  $('expList').innerHTML = list.length
-    ? list.map(e => `<div class="exp-item" onclick="openPreview(${e.id})"><strong>${e.name}</strong><br><small style="color:var(--muted)">${e.sections.length} section(s)</small></div>`).join('')
-    : '<p style="color:var(--muted)">No matching experiments found.</p>';
+function renderHomeResults(list) {
+  $('expList').innerHTML = list.map(e =>
+    `<div class="exp-card" onclick="openPreview(${e.id})">
+       <div class="exp-module">${e.module || 'Uncategorized'}</div>
+       <h4>${e.name}</h4>
+       <p>${e.sections.length} section(s)</p>
+     </div>`).join('') || '<p style="color:var(--muted)">No matching experiments found.</p>';
 }
-
-function filterExperiments(q) {
-  const query = q.trim().toLowerCase();
-  return experiments.filter(e => e.name.toLowerCase().includes(query));
-}
-
 function setupSearch() {
   const input = $('searchInput'), box = $('suggestions');
   input.addEventListener('input', () => {
-    const matches = filterExperiments(input.value);
-    renderExpList(matches);
+    const q = input.value.trim().toLowerCase();
+    const matches = getAllExperiments().filter(e => e.name.toLowerCase().includes(q));
+    renderHomeResults(matches);
     box.innerHTML = matches.map(e => `<li onclick="pickSuggestion(${e.id})">${e.name}</li>`).join('');
     box.style.display = matches.length && input.value ? 'block' : 'none';
   });
   input.addEventListener('blur', () => setTimeout(() => box.style.display = 'none', 200));
 }
 function pickSuggestion(id) {
-  const e = experiments.find(x => x.id === id);
+  const e = getAllExperiments().find(x => x.id === id);
   $('searchInput').value = e.name;
   $('suggestions').style.display = 'none';
-  renderExpList([e]);
+  renderHomeResults([e]);
 }
 
-/* ---------- + ADD → PAGE 2 preview ---------- */
-function addExperiment() {
-  openPreview(experiments[0].id);
+/* ---------- MODULES ---------- */
+function renderModules() {
+  const all = getAllExperiments();
+  const mods = [...new Set(MODULES.concat(all.map(e => e.module || 'Uncategorized')))];
+  $('modulesWrap').innerHTML = mods.map(m => {
+    const exps = all.filter(e => (e.module || 'Uncategorized') === m);
+    return `<div class="module-block">
+      <h3>${m}</h3>
+      <div class="exp-grid">
+        ${exps.length ? exps.map(e => `<div class="exp-card" onclick="openPreview(${e.id})"><h4>${e.name}</h4><p>${e.summary ? e.summary.slice(0,80)+'…' : ''}</p></div>`).join('') : '<p class="muted">No experiments yet.</p>'}
+      </div>
+    </div>`;
+  }).join('');
 }
+
+/* ---------- ADD EXPERIMENT ---------- */
+function openAdd() {
+  $('modSelect').innerHTML = MODULES.map(m => `<option>${m}</option>`).join('');
+  showView('view-add');
+}
+function saveNewExperiment() {
+  const name = $('fName').value.trim();
+  if (!name) { alert('Please enter an experiment name.'); return; }
+  const exp = {
+    id: nextId(),
+    name,
+    module: $('modSelect').value,
+    previewVideo: $('fPreview').value.trim() || 'assets/videos/preview.mp4',
+    youtubeVideo: $('fYoutubeEmbed').value.trim(),
+    youtubeLink: $('fYoutube').value.trim(),
+    githubLink: $('fGithub').value.trim(),
+    summary: $('fSummary').value.trim(),
+    sections: [{ letter: 'A', title: 'Overview', video: $('fPreview').value.trim() || '', code: '# Add your code in js/data.js' }]
+  };
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem('mbu_experiments') || '[]'); } catch (e) {}
+  saved.push(exp);
+  localStorage.setItem('mbu_experiments', JSON.stringify(saved));
+  alert('Experiment added!');
+  ['fName','fPreview','fYoutubeEmbed','fYoutube','fGithub','fSummary'].forEach(id => $(id).value = '');
+  navTo('view-modules');
+}
+
+/* ---------- + ADD → preview ---------- */
+function addExperiment() { navTo('view-modules'); }
 function openPreview(id) {
-  currentExp = experiments.find(e => e.id === id) || experiments[0];
+  currentExp = getAllExperiments().find(e => e.id === id) || getAllExperiments()[0];
   $('previewVideo').src = currentExp.previewVideo;
   $('previewVideo').load();
   $('previewName').textContent = currentExp.name;
   attachHoverPlay($('previewVideo'));
   showView('view-preview');
 }
-
-/* ---------- PAGE 3 overview ---------- */
 function openOverview() {
   $('detailsVideo').src = currentExp.previewVideo;
   $('detailsVideo').load();
   attachHoverPlay($('detailsVideo'));
   $('detailsName').textContent = currentExp.name;
   $('sectionsList').innerHTML = currentExp.sections.map((s, i) =>
-    `<button class="section-chip" onclick="openSection(${i})" title="${s.title}">${s.letter}</button>`).join('');
-  $('youtubeFrame').src = currentExp.youtubeVideo;
-  $('youtubeLink').href = currentExp.youtubeLink;
-  $('youtubeLink').textContent = currentExp.youtubeLink;
-  $('githubLink').href = currentExp.githubLink;
-  $('githubLink').textContent = currentExp.githubLink;
-  $('summaryText').textContent = currentExp.summary;
+    `<button class="section-chip" onclick="openSection(${i})" title="${s.title || ''}">${s.letter}</button>`).join('');
+  $('youtubeFrame').src = currentExp.youtubeVideo || '';
+  $('youtubeLink').href = currentExp.youtubeLink || '#';
+  $('youtubeLink').textContent = currentExp.youtubeLink || '—';
+  $('githubLink').href = currentExp.githubLink || '#';
+  $('githubLink').textContent = currentExp.githubLink || '—';
+  $('summaryText').textContent = currentExp.summary || '';
   showView('view-details');
 }
-
-/* ---------- PAGE 4 section ---------- */
 function openSection(i) {
   currentSectionIdx = i;
   const s = currentExp.sections[i];
@@ -118,11 +165,8 @@ function openSection(i) {
   renderCode(s.code);
   showView('view-section');
 }
-
-/* ---------- copy code ---------- */
 function copyCode() {
-  const s = currentExp.sections[currentSectionIdx];
-  navigator.clipboard.writeText(s.code).then(() => {
+  navigator.clipboard.writeText(currentExp.sections[currentSectionIdx].code).then(() => {
     const b = $('copyBtn'); b.textContent = 'Copied!';
     setTimeout(() => b.textContent = 'Copy Code', 1500);
   });

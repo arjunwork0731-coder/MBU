@@ -5,19 +5,28 @@
 
 const STUDENT = {
   photo: "assets/images/student-photo.jpg", // replace with your photo file
-  name: "Student Name",
+  name: "Arjun Reddy",
   idNumber: "S2026-0001",
   section: "Section A",
   faculty: "Faculty of Engineering",
-  profession: "B.Tech Data Science"
+  profession: "B.Tech Data Science Student"
 };
 
 const SUBJECT_CODE = "DS-LAB-401";
+
+// Module names — edit / rename these as you like.
+const MODULES = [
+  "Module 1 — Getting Started with Data Science",
+  "Module 2 — Data Wrangling",
+  "Module 3 — Data Visualization",
+  "Module 4 — NumPy & Statistics"
+];
 
 const experiments = [
   {
     id: 1,
     name: "Experiment 1 — Data Cleaning",
+    module: "Module 2 — Data Wrangling",
     previewVideo: "assets/videos/exp1-preview.mp4",
     youtubeVideo: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -35,6 +44,7 @@ const experiments = [
   {
     id: 2,
     name: "Experiment 2 — Data Visualization",
+    module: "Module 3 — Data Visualization",
     previewVideo: "assets/videos/exp2-preview.mp4",
     youtubeVideo: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -56,6 +66,7 @@ const experiments = [
   {
     id: 3,
     name: "Experiment 3 — Pandas",
+    module: "Module 2 — Data Wrangling",
     previewVideo: "assets/videos/exp3-preview.mp4",
     youtubeVideo: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -71,6 +82,7 @@ const experiments = [
   {
     id: 4,
     name: "Experiment 4 — NumPy",
+    module: "Module 4 — NumPy & Statistics",
     previewVideo: "assets/videos/exp4-preview.mp4",
     youtubeVideo: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
